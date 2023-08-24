@@ -1,2 +1,3 @@
-# EJ2-DataGrid-BlazorServer-GridEdit-EditTemplate-TimePicker
-This demo helps us to render the TimePicker control in EditForm and update the values in datasource on saving 
+# Blazor DataGrid with TimePicker Edit Form
+
+This sample explains how to render the TimePicker control in EditForm of Blazor DataGrid.
