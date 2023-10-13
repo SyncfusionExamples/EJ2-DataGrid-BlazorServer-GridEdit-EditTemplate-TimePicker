@@ -1,0 +1,49 @@
+﻿@page "/"
+
+<SfGrid AllowPaging="true" DataSource="@Orders" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" })">
+    <GridEditSettings AllowEditing="true" AllowDeleting="true" AllowAdding="true" Mode="@EditMode.Normal"></GridEditSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(Order.OrderID) HeaderText="Order ID" IsPrimaryKey="true" ValidationRules="@(new ValidationRules{ Required=true})" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+        <GridColumn Field=@nameof(Order.CustomerID) HeaderText="Customer Name" ValidationRules="@(new ValidationRules{ Required=true})" Width="150">
+            <EditTemplate>
+                <SfAutoComplete ID="CustomerID" @bind-Value="@((context as Order).CustomerID)" DataSource="@Orders">
+                    <AutoCompleteFieldSettings Value="CustomerID"></AutoCompleteFieldSettings>
+                </SfAutoComplete>
+            </EditTemplate>
+        </GridColumn>
+        <GridColumn Field=@nameof(Order.Freight) HeaderText="Freight" EditType="EditType.NumericEdit" Format="C2" Width="140" TextAlign="@TextAlign.Right"></GridColumn>
+        <GridColumn Field=@nameof(Order.OrderDate) HeaderText="Order Date" Format="HH:mm" Type="ColumnType.DateTime" ValidationRules="@(new ValidationRules { Required= true })" Width="160">
+            <EditTemplate>
+                <SfTimePicker TValue="DateTime?" @bind-Value="@((context as Order).OrderDate)"
+                              AllowEdit="true" Format="hh:mm:tt" CssClass="CustomDateCSS" ShowClearButton="true"></SfTimePicker>
+            </EditTemplate>
+        </GridColumn>
+    </GridColumns>
+</SfGrid>
+
+
+@code{
+    public List<Order> Orders { get; set; }
+    public void OnComplete(ActionEventArgs<Order> Args)
+    {
+      
+    }
+    protected override void OnInitialized()
+    {
+        Orders = Enumerable.Range(1, 25).Select(x => new Order()
+        {
+            OrderID = 1000 + x,
+            CustomerID = (new string[] { "ALFKI", "ANANTR", "ANTON", "BLONP", "BOLID" })[new Random().Next(5)],
+            Freight = 2.1 * x,
+            OrderDate = DateTime.Now.AddDays(-x),
+        }).ToList();
+    }
+
+    public class Order
+    {
+        public int? OrderID { get; set; }
+        public string CustomerID { get; set; }
+        public DateTime? OrderDate { get; set; }
+        public double? Freight { get; set; }
+    }
+}
